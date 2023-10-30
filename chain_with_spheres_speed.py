@@ -37,29 +37,14 @@ for n in range(0, len(sphere_list) - 1):
     bpy.context.object.rigid_body_constraint.object1 = sphere_list[n]
     bpy.context.object.rigid_body_constraint.object2 = sphere_list[n+1]
 
-# Substitua 'NomeDoObjeto' pelo nome do objeto que você deseja rastrear
-nome_do_objeto = 'nodo_8'
 
-# Obtém uma referência para o objeto
-objeto = bpy.data.objects.get(nome_do_objeto)
-
-# Define os frames inicial e final para calcular a velocidade
-frame_inicial = 1
-frame_final = bpy.context.scene.frame_end
-
-# Lista para armazenar as velocidades calculadas frame a frame
-velocidades = []
-
-for frame in range(frame_inicial, frame_final + 1):
-    # Define o frame atual
-    bpy.context.scene.frame_set(frame)
-
-    if frame > frame_inicial:
-        # Obtém as matrizes de transformação dos objetos para os dois frames
+names = ("nodo_5",)
+def frame_change_post(scene, dg):
+    frame = scene.frame_current
+    for name in names:
+        objeto = dg.objects.get(name)
         matriz_atual = objeto.matrix_world.copy()
-        bpy.context.scene.frame_set(frame - 1)
         matriz_anterior = objeto.matrix_world.copy()
-        bpy.context.scene.frame_set(frame)
 
         # Calcula a diferença na matriz de transformação (matriz de deslocamento)
         diferenca_matriz = matriz_atual.inverted() @ matriz_anterior
@@ -72,16 +57,8 @@ for frame in range(frame_inicial, frame_final + 1):
 
         # Adiciona a velocidade calculada à lista
         velocidades.append((frame, velocidade))
-
-
-# Agora você tem uma lista de tuplas contendo o número do frame e a velocidade do objeto em cada frame
-for frame, velocidade in velocidades:
-    # length calcula a magnitude. Calculando a hipotenusa. Caso necessario, calcula isso em 3D. 
-    #Deve ter alguma relacao com a area da superfice da dimensao que corresponde a hipotenusa.
-    magnitude = velocidade.length
-    print(f"Frame {frame}: Velocidade ({velocidade.x}, {velocidade.y}, {velocidade.z}), Magnitude: {magnitude}")
-    
-    
-#bpy.context.scene.frame_set(1)
-
-#bpy.ops.screen.animation_play()
+        print(f"frame {frame} ------------------")
+            
+velocidades = []
+bpy.app.handlers.frame_change_post.clear()
+bpy.app.handlers.frame_change_post.append(frame_change_post)
