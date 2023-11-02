@@ -1,5 +1,6 @@
 import bpy
 import math
+import types
 
 #Variables
 x_nodo_pos = 0
@@ -38,27 +39,31 @@ for n in range(0, len(sphere_list) - 1):
     bpy.context.object.rigid_body_constraint.object2 = sphere_list[n+1]
 
 
-names = ("nodo_5",)
 def frame_change_post(scene, dg):
     frame = scene.frame_current
-    for name in names:
-        objeto = dg.objects.get(name)
-        matriz_atual = objeto.matrix_world.copy()
-        matriz_anterior = objeto.matrix_world.copy()
 
-        # Calcula a diferença na matriz de transformação (matriz de deslocamento)
-        diferenca_matriz = matriz_atual.inverted() @ matriz_anterior
+    objeto = dg.objects.get(name)
+    matriz_atual = objeto.matrix_world.copy()
+    matriz_anterior = lastObjList.pop().matrix_world.copy()
 
-        # Obtém o intervalo de tempo entre os dois frames
-        intervalo_tempo = 1 / bpy.context.scene.render.fps  # Use a taxa de quadros da renderização
+    # Calcula a diferença na matriz de transformação (matriz de deslocamento)
+    diferenca_matriz = matriz_atual.inverted() @ matriz_anterior
 
-        # Calcula a velocidade dividindo a matriz de deslocamento pelo intervalo de tempo
-        velocidade = diferenca_matriz.to_translation() / intervalo_tempo
+    # Obtém o intervalo de tempo entre os dois frames
+    intervalo_tempo = 1 / bpy.context.scene.render.fps  # Use a taxa de quadros da renderização
 
-        # Adiciona a velocidade calculada à lista
-        velocidades.append((frame, velocidade))
-        print(f"frame {frame} ------------------")
-            
+    # Calcula a velocidade dividindo a matriz de deslocamento pelo intervalo de tempo
+    velocidade = diferenca_matriz.to_translation() / intervalo_tempo
+
+    # Adiciona a velocidade calculada à lista
+    velocidades.append((frame, velocidade))
+    print(f"frame {frame} ------------------ {velocidade}")
+    lastObjList.append(objeto.copy())
+
 velocidades = []
+name = "nodo_5"
+init_list = bpy.data.objects.get(name)
+lastObjList = []
+lastObjList.append(init_list)
 bpy.app.handlers.frame_change_post.clear()
 bpy.app.handlers.frame_change_post.append(frame_change_post)
