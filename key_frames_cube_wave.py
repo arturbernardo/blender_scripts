@@ -34,3 +34,13 @@ for cube in cubes:
     cube.scale = [1,1,1]
     cube.keyframe_insert(data_path = "scale", frame = 80 + offset)
     offset += 1
+    
+def frame_change_post(scene, dg):
+    objeto = bpy.context.object
+    frame = scene.frame_current
+    scales = bpy.context.object.scale
+    print(f"frame {frame} ------------------ {scales}")
+
+    
+bpy.app.handlers.frame_change_post.clear()
+bpy.app.handlers.frame_change_post.append(frame_change_post)
