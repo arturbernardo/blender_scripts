@@ -25,9 +25,9 @@ cubes = bpy.data.collections["Cubes"].objects
 offset = 0
 
 for cube in cubes:
-    cube.scale = [0,0,0]
+    cube.scale = [1,1,1]
     cube.keyframe_insert(data_path = "scale", frame = 1 + offset)
-    cube.scale = [1,1,5]
+    cube.scale = [1,1,7]
     cube.keyframe_insert(data_path = "scale", frame = 50 + offset)
     cube.scale = [1,1,.5]
     cube.keyframe_insert(data_path = "scale", frame = 70 + offset)
