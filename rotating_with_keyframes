@@ -1,0 +1,27 @@
+import bpy
+import math
+
+# Limpar a cena atual
+bpy.ops.object.select_all(action='DESELECT')
+bpy.ops.object.select_by_type(type='MESH')
+bpy.ops.object.delete()
+
+# Adicionar um objeto vazio (como um ponto de controle)
+bpy.ops.mesh.primitive_cube_add(size=2, enter_editmode=False, align='WORLD', scale=(1, 1, 1))
+
+
+# Configurar a animação
+bpy.context.scene.frame_start = 1
+bpy.context.scene.frame_end = 100
+
+# Adicionar keyframes para animação circular
+obj = bpy.context.object
+rotation_speed = 0.1  # Ajuste conforme necessário
+
+for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end + 1):
+    angle = frame * rotation_speed
+    obj.rotation_euler = (0, 0, angle)
+    obj.keyframe_insert(data_path="rotation_euler", index=2, frame=frame)
+
+# Reproduzir a animação
+bpy.ops.screen.animation_play()
