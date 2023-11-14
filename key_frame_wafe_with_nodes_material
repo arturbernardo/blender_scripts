@@ -12,6 +12,8 @@ scene.frame_end = 165
 collection = bpy.data.collections.new("Cubes")
 bpy.context.scene.collection.children.link(collection)
 
+# World black
+bpy.data.worlds["World"].node_tree.nodes["Background"].inputs[0].default_value = (0, 0, 0, 1)
 
 # Nome do material
 material_name = "EmissionMaterial"
@@ -31,6 +33,7 @@ for node in nodes:
 texture_coordinate_node = nodes.new(type='ShaderNodeTexCoord')
 # Adicionar um nó de emissão
 emission_node = nodes.new(type='ShaderNodeEmission')
+emission_node.inputs[1].default_value = 6
 #cor
 #emission_node.inputs[0].default_value = (0.1, 1.0, 0.1, 1.0)  
 
@@ -38,7 +41,7 @@ emission_node = nodes.new(type='ShaderNodeEmission')
 output_node = nodes.new(type='ShaderNodeOutputMaterial')
 
 # Conectar os nós
-texture_coordinate_node = links.new(texture_coordinate_node.outputs["UV"], emission_node.inputs["Color"])
+texture_coordinate_node = links.new(texture_coordinate_node.outputs["Window"], emission_node.inputs["Color"])
 emission_node = links.new(emission_node.outputs["Emission"], output_node.inputs["Surface"])
 
 
@@ -77,6 +80,3 @@ def frame_change_post(scene, dg):
     
 bpy.app.handlers.frame_change_post.clear()
 bpy.app.handlers.frame_change_post.append(frame_change_post)
-
-
-#bpy.ops.node.translate_attach_remove_on_cancel(TRANSFORM_OT_translate={"value":(-1382.29, -1523.45, 0), "orient_type":'GLOBAL', "orient_matrix":((1, 0, 0), (0, 1, 0), (0, 0, 1)), "orient_matrix_type":'GLOBAL', "constraint_axis":(False, False, False), "mirror":False, "use_proportional_edit":False, "proportional_edit_falloff":'SMOOTH', "proportional_size":1, "use_proportional_connected":False, "use_proportional_projected":False, "snap":False, "snap_elements":{}, "use_snap_project":False, "snap_target":'CLOSEST', "use_snap_self":True, "use_snap_edit":True, "use_snap_nonedit":True, "use_snap_selectable":False, "snap_point":(0, 0, 0), "snap_align":False, "snap_normal":(0, 0, 0), "gpencil_strokes":False, "cursor_transform":False, "texture_space":False, "remove_on_cancel":True, "view2d_edge_pan":True, "release_confirm":False, "use_accurate":False, "use_automerge_and_split":False}, NODE_OT_attach={})
