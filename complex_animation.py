@@ -1,4 +1,5 @@
 import bpy
+import math
 
 #A
 bpy.ops.mesh.primitive_cube_add(align='WORLD', location=(0, -6, 0), scale=(1, 1, 1))
@@ -7,8 +8,13 @@ a_door.name = "A"
 
 a_door.location.z = -10
 a_door.keyframe_insert(data_path = "location", frame = 1)
+a_door.rotation_euler.y = math.radians(0) #
+a_door.keyframe_insert(data_path = "rotation_euler", frame = 1) #
+
 a_door.location.z = 0
 a_door.keyframe_insert(data_path = "location", frame = 80)
+a_door.rotation_euler.y = math.radians(360) #
+a_door.keyframe_insert(data_path = "rotation_euler", frame = 80) #
 
 #B
 bpy.ops.mesh.primitive_cube_add(align='WORLD', location=(0, 0, 0), scale=(1, 1, 1))
