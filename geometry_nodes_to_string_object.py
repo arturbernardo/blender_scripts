@@ -29,3 +29,9 @@ if (to_be_removed != None):
 node_group.links.new(node_value.outputs[0], node_value_to_string.inputs[0])
 node_group.links.new(node_value_to_string.outputs[0], node_string_to_curve.inputs[0])
 node_group.links.new(node_string_to_curve.outputs[0], node_output.inputs[0])
+
+# Cria keyframes para o valor
+node_value.outputs[0].default_value = 0
+node_value.outputs[0].keyframe_insert(data_path = "default_value", frame = 1)
+node_value.outputs[0].default_value = 123
+node_value.outputs[0].keyframe_insert(data_path = "default_value", frame = 100)
